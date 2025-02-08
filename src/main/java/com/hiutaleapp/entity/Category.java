@@ -3,8 +3,8 @@ package com.hiutaleapp.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -23,10 +23,10 @@ public class Category {
 
     private String description;
 
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updatedAt;
 
     @OneToMany(mappedBy = "category")
