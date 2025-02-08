@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
     public User mapToEntity(UserDTO userDTO) {
         User user = new User();
         user.setUserId(userDTO.getUserId());
-        user.setUserName(userDTO.getUserName());
+        user.setUsername(userDTO.getUserName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
         if (user.isPresent()) {
             var obj = user.get();
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(obj.getUserName())
+                    .username(obj.getUsername())
                     .password(obj.getPassword())
                     .roles(getRoles(obj))
                     .build();
