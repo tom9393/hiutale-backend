@@ -83,7 +83,6 @@ public class UserController {
     @GetMapping("/me")
     public Optional<UserDTO> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getName());
-        return userService.getUserById((long)1);
+        return userService.getUserByUsername(auth.getName());
     }
 }

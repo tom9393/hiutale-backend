@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
-                    reg.requestMatchers("/home", "/users/register", "/users/authenticate").permitAll();
+                    reg.requestMatchers("/users/register", "/users/authenticate").permitAll();
                     reg.requestMatchers(("/admin/**")).hasRole("ADMIN");
                     reg.requestMatchers("/user/**").hasRole("USER");
                     reg.anyRequest().authenticated();

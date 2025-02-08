@@ -28,6 +28,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).map(this::mapToDTO);
     }
 
+    public Optional<UserDTO> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::mapToDTO);
+    }
+
     public UserDTO createUser(User user) {
         return mapToDTO(userRepository.save(user));
     }
@@ -59,7 +63,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUserName(username);
+        Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             var obj = user.get();
             return org.springframework.security.core.userdetails.User.builder()
