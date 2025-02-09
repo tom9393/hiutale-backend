@@ -15,7 +15,8 @@ import java.util.Date;
 public class EventAttendee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="eventattendee_seq", sequenceName="eventattendee_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="eventattendee_seq")
     private Long eventAttendeeId;
 
     @ManyToOne

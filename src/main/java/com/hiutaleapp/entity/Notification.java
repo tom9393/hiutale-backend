@@ -15,7 +15,8 @@ import java.util.Date;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="notification_seq", sequenceName="notification_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="notification_seq")
     private Long notificationId;
 
     @ManyToOne

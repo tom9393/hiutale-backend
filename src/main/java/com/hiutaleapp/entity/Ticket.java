@@ -15,7 +15,8 @@ import java.util.Date;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="ticket_seq", sequenceName="ticket_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ticket_seq")
     private Long ticketId;
 
     @ManyToOne

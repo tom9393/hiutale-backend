@@ -15,7 +15,8 @@ import java.util.Date;
 public class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="location_seq", sequenceName="location_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="location_seq")
     private Long locationId;
 
     private String name;
