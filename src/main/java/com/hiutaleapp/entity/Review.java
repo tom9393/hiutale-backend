@@ -3,8 +3,8 @@ package com.hiutaleapp.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -15,7 +15,8 @@ import java.util.Date;
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="review_seq", sequenceName="review_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="review_seq")
     private Long reviewId;
 
     @ManyToOne
@@ -30,9 +31,9 @@ public class Review {
 
     private String reviewText;
 
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updatedAt;
 }

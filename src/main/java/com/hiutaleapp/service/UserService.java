@@ -4,6 +4,9 @@ import com.hiutaleapp.dto.UserDTO;
 import com.hiutaleapp.entity.User;
 import com.hiutaleapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -23,6 +26,10 @@ public class UserService {
 
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id).map(this::mapToDTO);
+    }
+
+    public Optional<UserDTO> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::mapToDTO);
     }
 
     public UserDTO createUser(User user) {
@@ -45,12 +52,34 @@ public class UserService {
     public User mapToEntity(UserDTO userDTO) {
         User user = new User();
         user.setUserId(userDTO.getUserId());
-        user.setUserName(userDTO.getUserName());
+        user.setUsername(userDTO.getUserName());
         user.setEmail(userDTO.getEmail());
-        user.setPasswordHash(userDTO.getPassword());
+        user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
         user.setCreatedAt(userDTO.getCreatedAt());
         user.setUpdatedAt(userDTO.getUpdatedAt());
         return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            var obj = user.get();
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(obj.getEmail())
+                    .password(obj.getPassword())
+                    .roles(getRoles(obj))
+                    .build();
+        } else {
+            throw new UsernameNotFoundException(email);
+        }
+    }
+
+    public String[] getRoles(User user) {
+        if (user.getRole() == null) {
+            return new String[] {"USER"};
+        }
+        return user.getRole().split(",");
     }
 }

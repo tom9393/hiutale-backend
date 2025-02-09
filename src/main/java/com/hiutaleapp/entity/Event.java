@@ -3,8 +3,8 @@ package com.hiutaleapp.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +16,8 @@ import java.util.List;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="event_seq", sequenceName="event_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="event_seq")
     private Long eventId;
 
     private String title;
@@ -31,10 +32,10 @@ public class Event {
 
     private String status;
 
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updatedAt;
 
     @ManyToOne

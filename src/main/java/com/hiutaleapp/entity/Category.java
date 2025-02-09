@@ -3,8 +3,8 @@ package com.hiutaleapp.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -16,17 +16,18 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue=1, name="category_seq", sequenceName="category_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="category_seq")
     private Long categoryId;
 
     private String name;
 
     private String description;
 
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updatedAt;
 
     @OneToMany(mappedBy = "category")
