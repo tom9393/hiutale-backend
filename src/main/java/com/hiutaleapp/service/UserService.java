@@ -62,17 +62,17 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             var obj = user.get();
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(obj.getUsername())
+                    .username(obj.getEmail())
                     .password(obj.getPassword())
                     .roles(getRoles(obj))
                     .build();
         } else {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(email);
         }
     }
 

@@ -69,13 +69,13 @@ public class UserController {
     @PostMapping("/authenticate")
     public String authenticateUser(@RequestBody LoginForm loginForm) {
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginForm.getUsername(),
+                loginForm.getEmail(),
                 loginForm.getPassword()
         ));
         if (auth.isAuthenticated()) {
-            return jwtService.generateToken(userService.loadUserByUsername(loginForm.getUsername()));
+            return jwtService.generateToken(userService.loadUserByUsername(loginForm.getEmail()));
         } else {
-            throw new UsernameNotFoundException(loginForm.getUsername());
+            throw new UsernameNotFoundException(loginForm.getEmail());
         }
     }
 

@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    container_name: hiutaleapp
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+    restart: always
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    restart: always
+
+networks:
+  app_network:
+
+volumes:
+  mariadb_data:

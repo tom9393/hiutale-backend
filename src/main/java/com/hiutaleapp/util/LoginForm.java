@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class LoginForm {
 
-    private String username;
+    private String email;
     private String password;
 
-    public LoginForm(String username, String password) {
-        this.username = username;
+    public LoginForm(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 }
