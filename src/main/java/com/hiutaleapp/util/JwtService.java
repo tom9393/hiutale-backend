@@ -3,7 +3,6 @@ package com.hiutaleapp.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -20,12 +19,12 @@ public class JwtService {
     private static final String JWT_SECRET = "8FA0432E035F87DD9A81DAA97047EE0290E21EBA444A8E8FA1B96FB84AE2888B8447B9CE621E6DE5F6FFF27B39814E7CFA4951194062FAAF9A8AE8092F71B152";
     private static final long VALIDITY = TimeUnit.MINUTES.toMillis(60);
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserPrincipal userDetails) {
         Map<String, String> claims = new HashMap<>();
         claims.put("iss", "hiutaleapp");
         return Jwts.builder()
                 .claims(claims)
-                .subject(userDetails.getUsername())
+                .subject(Long.toString(userDetails.getId()))
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plusSeconds(VALIDITY)))
                 .signWith(generateKey())
@@ -37,7 +36,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(decodedKey);
     }
 
-    public String extractUsername(String token) {
+    public String extractId(String token) {
         Claims claims = getClaims(token);
         return claims.getSubject();
     }
