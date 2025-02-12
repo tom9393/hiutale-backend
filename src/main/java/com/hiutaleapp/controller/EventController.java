@@ -19,8 +19,6 @@ public class EventController {
 
     @GetMapping("/all")
     public List<EventDTO> getAllEvents() {
-        Authentication a = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(a);
         return eventService.getAllEvents();
     }
 
