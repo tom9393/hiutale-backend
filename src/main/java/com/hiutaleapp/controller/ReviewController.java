@@ -15,29 +15,29 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<ReviewDTO> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long id) {
         return reviewService.getReviewById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ReviewDTO createReview(@RequestBody Review review) {
         return reviewService.createReview(review);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ReviewDTO updateReview(@PathVariable Long id, @RequestBody Review review) {
         return reviewService.updateReview(id, review);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
     }

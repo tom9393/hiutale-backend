@@ -15,29 +15,29 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<TicketDTO> getAllTickets() {
         return ticketService.getAllTickets();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<TicketDTO> getTicketById(@PathVariable Long id) {
         return ticketService.getTicketById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public TicketDTO createTicket(@RequestBody Ticket ticket) {
         return ticketService.createTicket(ticket);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public TicketDTO updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
         return ticketService.updateTicket(id, ticket);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
     }

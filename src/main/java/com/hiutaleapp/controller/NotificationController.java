@@ -15,29 +15,29 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<NotificationDTO> getAllNotifications() {
         return notificationService.getAllNotifications();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable Long id) {
         return notificationService.getNotificationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public NotificationDTO createNotification(@RequestBody Notification notification) {
         return notificationService.createNotification(notification);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public NotificationDTO updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
         return notificationService.updateNotification(id, notification);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);
     }
