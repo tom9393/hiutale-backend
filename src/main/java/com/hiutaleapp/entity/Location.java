@@ -27,6 +27,10 @@ public class Location {
 
     private String postalCode;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
+
     @CreationTimestamp
     private Date createdAt;
 

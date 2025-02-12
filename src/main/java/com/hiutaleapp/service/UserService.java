@@ -3,8 +3,8 @@ package com.hiutaleapp.service;
 import com.hiutaleapp.dto.UserDTO;
 import com.hiutaleapp.entity.User;
 import com.hiutaleapp.repository.UserRepository;
-import com.hiutaleapp.util.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -62,20 +62,28 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserPrincipal loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with email: %s.", email)));
 
-        return UserPrincipal.create(user);
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(Long.toString(user.getUserId()))
+                .password(user.getPassword())
+                .roles(getRoles(user))
+                .build();
     }
 
-    public UserPrincipal loadUserById(Long id) {
+    public UserDetails loadUserById(Long id) {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with ID: %s.", id)));
 
-        return UserPrincipal.create(user);
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(Long.toString(user.getUserId()))
+                .password(user.getPassword())
+                .roles(getRoles(user))
+                .build();
     }
 
     public String[] getRoles(User user) {

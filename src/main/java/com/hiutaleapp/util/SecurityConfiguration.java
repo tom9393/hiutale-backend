@@ -42,6 +42,8 @@ public class SecurityConfiguration {
                     ).permitAll();
                     reg.requestMatchers(
                             "/users/update/**", "/users/delete/**",
+                            "/events/create", "/events/delete/**",
+                            "/locations/create", "/locations/delete/**",
                             "/tickets/create", "/tickets/update/**", "/tickets/delete/**",
                             "/reviews/create", "/reviews/update/**", "/reviews/delete/**",
                             "/notifications/update/**", "/notifications/delete/**"

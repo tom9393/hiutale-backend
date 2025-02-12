@@ -44,7 +44,7 @@ public class EventService {
 
     public Event mapToEntity(EventDTO eventDTO) {
         Event event = new Event();
-        event.setEventId(eventDTO.getEventId());
+        event.setEventId(eventDTO.getId());
         event.setTitle(eventDTO.getTitle());
         event.setDescription(eventDTO.getDescription());
         event.setCapacity(eventDTO.getCapacity());

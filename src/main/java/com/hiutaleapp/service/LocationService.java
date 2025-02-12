@@ -44,7 +44,7 @@ public class LocationService {
 
     public Location mapToEntity(LocationDTO locationDTO) {
         Location location = new Location();
-        location.setLocationId(locationDTO.getLocationId());
+        location.setLocationId(locationDTO.getId());
         location.setName(locationDTO.getName());
         location.setAddress(locationDTO.getAddress());
         location.setCity(locationDTO.getCity());
