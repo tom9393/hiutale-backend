@@ -75,7 +75,7 @@ public class UserController {
             String token = jwtService.generateToken(userService.loadUserById(userDTO.getId()));
             return new AuthDTO(userDTO, token);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateUserException("User with email address" + registerForm.getEmail() + " already exists");
+            throw new DataViolationException("User with email address" + registerForm.getEmail() + " already exists");
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");
         }
