@@ -1,5 +1,6 @@
 package com.hiutaleapp.util;
 
+import com.hiutaleapp.entity.Category;
 import com.hiutaleapp.entity.EventCategory;
 import lombok.Getter;
 import lombok.Setter;

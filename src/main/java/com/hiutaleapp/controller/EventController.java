@@ -64,17 +64,19 @@ public class EventController {
             event.setStatus(eventForm.getStatus());
 
             List<EventCategory> c = new ArrayList<>();
-            for (int i = 0; i < eventForm.getCategories().size(); i++) {
-                Long categoryNumber = eventForm.getCategories().get(i);
-                EventCategory eventCategory = new EventCategory();
-                Category category = new Category();
-                category.setCategoryId(categoryNumber);
-                eventCategory.setCategory(category);
-                eventCategory.setEvent(event);
-                c.add(eventCategory);
+            if (eventForm.getCategories() != null) {
+                for (int i = 0; i < eventForm.getCategories().size(); i++) {
+                    Long categoryNumber = eventForm.getCategories().get(i);
+                    EventCategory eventCategory = new EventCategory();
+                    Category category = new Category();
+                    category.setCategoryId(categoryNumber);
+                    eventCategory.setCategory(category);
+                    eventCategory.setEvent(event);
+                    c.add(eventCategory);
+                }
             }
 
-            event.setEventCategories(c);
+            event.setEventCategories(c.isEmpty() ? null : c);
             event.setOrganizer(user);
             event.setLocation(location);
             return eventService.createEvent(event);
