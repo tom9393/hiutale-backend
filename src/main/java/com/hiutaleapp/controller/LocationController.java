@@ -1,6 +1,5 @@
 package com.hiutaleapp.controller;
 
-import com.hiutaleapp.dto.EventDTO;
 import com.hiutaleapp.dto.LocationDTO;
 import com.hiutaleapp.entity.Location;
 import com.hiutaleapp.entity.User;
@@ -44,8 +43,10 @@ public class LocationController {
     public LocationDTO createLocation(@RequestBody LocationForm locationForm) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
             Location location = new Location();
             User user = new User();
+
             user.setUserId(Long.parseLong(auth.getName()));
             location.setName(locationForm.getName());
             location.setAddress(locationForm.getAddress());

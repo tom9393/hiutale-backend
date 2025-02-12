@@ -49,4 +49,8 @@ public class EventCategoryService {
         eventCategory.getEvent().setEventId(eventCategoryDTO.getEventId());
         return eventCategory;
     }
+
+    public List<EventCategoryDTO> createEventCategories(List<EventCategory> categories) {
+        return eventCategoryRepository.saveAll(categories).stream().map(EventCategoryDTO::new).collect(Collectors.toList());
+    }
 }

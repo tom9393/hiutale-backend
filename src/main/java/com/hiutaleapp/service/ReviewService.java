@@ -44,7 +44,7 @@ public class ReviewService {
 
     public Review mapToEntity(ReviewDTO reviewDTO) {
         Review review = new Review();
-        review.setReviewId(reviewDTO.getReviewId());
+        review.setReviewId(reviewDTO.getId());
         review.getUser().setUserId(reviewDTO.getUserId());
         review.setRating(reviewDTO.getRating());
         review.setReviewText(reviewDTO.getReviewText());
