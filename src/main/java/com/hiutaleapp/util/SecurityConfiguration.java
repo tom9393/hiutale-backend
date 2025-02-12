@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
                     reg.requestMatchers(
-                            "/users/register", "/users/authenticate",
+                            "/users/register", "/users/login",
                             "/events/all", "/events/one/**",
                             "/locations/all", "/locations/one/**",
                             "/reviews/all", "/reviews/one/**",
