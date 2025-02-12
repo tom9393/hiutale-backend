@@ -1,9 +1,8 @@
 package com.hiutaleapp.controller;
 
 import com.hiutaleapp.dto.EventDTO;
-import com.hiutaleapp.entity.Event;
-import com.hiutaleapp.entity.Location;
-import com.hiutaleapp.entity.User;
+import com.hiutaleapp.entity.*;
+import com.hiutaleapp.service.EventCategoryService;
 import com.hiutaleapp.service.EventService;
 import com.hiutaleapp.util.DatabaseConnectionException;
 import com.hiutaleapp.util.DataViolationException;
@@ -18,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ import java.util.Optional;
 public class EventController {
     @Autowired
     private EventService eventService;
+    @Autowired
+    private EventCategoryService eventCategoryService;
 
     @GetMapping("/all")
     public List<EventDTO> getAllEvents() {
@@ -60,13 +63,27 @@ public class EventController {
             event.setEndTime(eventForm.getEnd());
             event.setStatus(eventForm.getStatus());
 
+            List<EventCategory> c = new ArrayList<>();
+            if (eventForm.getCategories() != null) {
+                for (int i = 0; i < eventForm.getCategories().size(); i++) {
+                    Long categoryNumber = eventForm.getCategories().get(i);
+                    EventCategory eventCategory = new EventCategory();
+                    Category category = new Category();
+                    category.setCategoryId(categoryNumber);
+                    eventCategory.setCategory(category);
+                    eventCategory.setEvent(event);
+                    c.add(eventCategory);
+                }
+            }
+
+            event.setEventCategories(c.isEmpty() ? null : c);
             event.setOrganizer(user);
             event.setLocation(location);
             return eventService.createEvent(event);
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");
         } catch (DataIntegrityViolationException e) {
-            throw new DataViolationException("Could not create event due to nonexistent location key");
+            throw new DataViolationException("Could not create event due to foreign key error");
         }
     }
 
