@@ -1,6 +1,5 @@
 package com.hiutaleapp.dto;
 
-import com.hiutaleapp.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
