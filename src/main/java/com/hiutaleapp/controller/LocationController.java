@@ -15,29 +15,29 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<LocationDTO> getAllLocations() {
         return locationService.getAllLocations();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<LocationDTO> getLocationById(@PathVariable Long id) {
         return locationService.getLocationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public LocationDTO createLocation(@RequestBody Location location) {
         return locationService.createLocation(location);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public LocationDTO updateLocation(@PathVariable Long id, @RequestBody Location location) {
         return locationService.updateLocation(id, location);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
     }

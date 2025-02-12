@@ -15,29 +15,29 @@ public class EventAttendeeController {
     @Autowired
     private EventAttendeeService eventAttendeeService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<EventAttendeeDTO> getAllEventAttendees() {
         return eventAttendeeService.getAllEventAttendees();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<EventAttendeeDTO> getEventAttendeeById(@PathVariable Long id) {
         return eventAttendeeService.getEventAttendeeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public EventAttendeeDTO createEventAttendee(@RequestBody EventAttendee eventAttendee) {
         return eventAttendeeService.createEventAttendee(eventAttendee);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public EventAttendeeDTO updateEventAttendee(@PathVariable Long id, @RequestBody EventAttendee eventAttendee) {
         return eventAttendeeService.updateEventAttendee(id, eventAttendee);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteEventAttendee(@PathVariable Long id) {
         eventAttendeeService.deleteEventAttendee(id);
     }

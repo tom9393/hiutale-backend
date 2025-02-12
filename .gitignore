@@ -163,3 +163,6 @@ buildNumber.properties
 .env
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven,java
+
+# Application properties for testing
+/src/main/resources/application.properties

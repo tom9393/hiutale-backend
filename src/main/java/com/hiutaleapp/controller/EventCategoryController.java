@@ -18,29 +18,29 @@ public class EventCategoryController {
     @Autowired
     private EventCategoryService eventCategoryService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<EventCategoryDTO> getAllEventCategories() {
         return eventCategoryService.getAllEventCategories();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}")
     public ResponseEntity<EventCategoryDTO> getEventCategoryById(@PathVariable Long id) {
         return eventCategoryService.getEventCategoryById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public EventCategoryDTO createEventCategory(@RequestBody EventCategory eventCategory) {
         return eventCategoryService.createEventCategory(eventCategory);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public EventCategoryDTO updateEventCategory(@PathVariable Long id, @RequestBody EventCategory eventCategory) {
         return eventCategoryService.updateEventCategory(id, eventCategory);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteEventCategory(@PathVariable Long id) {
         eventCategoryService.deleteEventCategory(id);
     }

@@ -31,9 +31,22 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
-                    reg.requestMatchers("/users/register", "/users/authenticate").permitAll();
-                    reg.requestMatchers(("/admin/**")).hasRole("ADMIN");
-                    reg.requestMatchers("/user/**").hasRole("USER");
+                    reg.requestMatchers(
+                            "/users/register", "/users/login",
+                            "/events/all", "/events/one/**",
+                            "/locations/all", "/locations/one/**",
+                            "/reviews/all", "/reviews/one/**",
+                            "/categories/all", "/categories/one/**",
+                            "/event-categories/all", "/event-categories/one/**"
+
+                    ).permitAll();
+                    reg.requestMatchers(
+                            "/users/update/**", "/users/delete/**",
+                            "/tickets/create", "/tickets/update/**", "/tickets/delete/**",
+                            "/reviews/create", "/reviews/update/**", "/reviews/delete/**",
+                            "/notifications/update/**", "/notifications/delete/**"
+                    ).hasRole("USER");
+                    reg.requestMatchers(("/**")).hasRole("ADMIN");
                     reg.anyRequest().authenticated();
         })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
