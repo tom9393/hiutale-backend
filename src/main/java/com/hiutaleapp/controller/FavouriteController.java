@@ -1,7 +1,7 @@
 package com.hiutaleapp.controller;
 
 import com.hiutaleapp.dto.TicketDTO;
-import com.hiutaleapp.entity.Ticket;
+import com.hiutaleapp.entity.Favourite;
 import com.hiutaleapp.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +28,13 @@ public class TicketController {
     }
 
     @PostMapping("/create")
-    public TicketDTO createTicket(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
+    public TicketDTO createTicket(@RequestBody Favourite favourite) {
+        return ticketService.createTicket(favourite);
     }
 
     @PutMapping("/update/{id}")
-    public TicketDTO updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
-        return ticketService.updateTicket(id, ticket);
+    public TicketDTO updateTicket(@PathVariable Long id, @RequestBody Favourite favourite) {
+        return ticketService.updateTicket(id, favourite);
     }
 
     @DeleteMapping("/delete/{id}")
