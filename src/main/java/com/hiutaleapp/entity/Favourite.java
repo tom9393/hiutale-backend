@@ -11,13 +11,18 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "tickets")
-public class Ticket {
+@Table(
+        name = "favourites",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"event_id", "user_id"})
+        }
+)
+public class Favourite {
 
     @Id
-    @SequenceGenerator(initialValue=1, name="ticket_seq", sequenceName="ticket_sequence", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ticket_seq")
-    private Long ticketId;
+    @SequenceGenerator(initialValue=1, name="favourite_seq", sequenceName="favourite_sequence", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="favourite_seq")
+    private Long favouriteId;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -26,12 +31,6 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    private String ticketType;
-
-    private Double price;
-
-    private String status;
 
     @CreationTimestamp
     private Date createdAt;

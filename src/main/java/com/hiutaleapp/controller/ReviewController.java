@@ -62,7 +62,7 @@ public class ReviewController {
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");
         } catch (DataIntegrityViolationException e) {
-            throw new DataViolationException("Could not create review due to nonexistent event key");
+            throw new DataViolationException("Could not create review due to foreign key error; either event doesn't exist or you have already reviewed it");
         }
     }
 

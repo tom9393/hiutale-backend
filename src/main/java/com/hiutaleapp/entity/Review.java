@@ -11,7 +11,12 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "reviews")
+@Table(
+        name = "reviews",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"event_id", "user_id"})
+        }
+)
 public class Review {
 
     @Id

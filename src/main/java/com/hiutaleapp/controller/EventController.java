@@ -2,7 +2,6 @@ package com.hiutaleapp.controller;
 
 import com.hiutaleapp.dto.EventDTO;
 import com.hiutaleapp.entity.*;
-import com.hiutaleapp.service.EventCategoryService;
 import com.hiutaleapp.service.EventService;
 import com.hiutaleapp.util.DatabaseConnectionException;
 import com.hiutaleapp.util.DataViolationException;
@@ -11,7 +10,6 @@ import com.hiutaleapp.util.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,19 +26,15 @@ import java.util.Optional;
 public class EventController {
     @Autowired
     private EventService eventService;
-    @Autowired
-    private EventCategoryService eventCategoryService;
 
     @GetMapping("/all")
     public List<EventDTO> getAllEvents() {
-        return eventService.getAllEvents();
+        return eventService.getAllEventsWithCounts();
     }
 
     @GetMapping("/one/{id}")
-    public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
-        return eventService.getEventById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public EventDTO getEventById(@PathVariable Long id) {
+        return eventService.getEventWithCounts(id);
     }
 
     @PostMapping("/create")
@@ -63,20 +57,10 @@ public class EventController {
             event.setEndTime(eventForm.getEnd());
             event.setStatus(eventForm.getStatus());
 
-            List<EventCategory> c = new ArrayList<>();
-            if (eventForm.getCategories() != null) {
-                for (int i = 0; i < eventForm.getCategories().size(); i++) {
-                    Long categoryNumber = eventForm.getCategories().get(i);
-                    EventCategory eventCategory = new EventCategory();
-                    Category category = new Category();
-                    category.setCategoryId(categoryNumber);
-                    eventCategory.setCategory(category);
-                    eventCategory.setEvent(event);
-                    c.add(eventCategory);
-                }
-            }
+            // If there's time left fix this
+            List<EventCategory> c = addCategories(eventForm.getCategories(), event);
 
-            event.setEventCategories(c.isEmpty() ? null : c);
+            event.setEventCategories(c);
             event.setOrganizer(user);
             event.setLocation(location);
             return eventService.createEvent(event);
@@ -111,5 +95,20 @@ public class EventController {
         } catch (DataIntegrityViolationException e) {
             throw new DataViolationException("Could not delete this event because other data is dependent upon it");
         }
+    }
+
+    private List<EventCategory> addCategories(List<Long> categories, Event event) {
+        if (categories == null) return null;
+        List<EventCategory> c = new ArrayList<>();
+        for (int i = 0; i < categories.size(); i++) {
+            Long categoryNumber = categories.get(i);
+            EventCategory eventCategory = new EventCategory();
+            Category category = new Category();
+            category.setCategoryId(categoryNumber);
+            eventCategory.setCategory(category);
+            eventCategory.setEvent(event);
+            c.add(eventCategory);
+        }
+        return c;
     }
 }

@@ -50,8 +50,8 @@ public class Event {
     private List<EventCategory> eventCategories;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventAttendee> eventAttendees;
+    private List<Attendance> attendances;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
+    private List<Favourite> favourites;
 }

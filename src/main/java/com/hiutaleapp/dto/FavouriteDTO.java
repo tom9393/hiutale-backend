@@ -8,22 +8,12 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class TicketDTO {
-    private Long ticketId;
-    private Long eventId;
-    private Long userId;
-    private String ticketType;
-    private Double price;
-    private String status;
-    private Date purchaseDate;
+public class FavouriteDTO {
+    private Long id;
+    private Date favouriteDate;
 
-    public TicketDTO(Favourite favourite) {
-        this.ticketId = favourite.getTicketId();
-        this.eventId = favourite.getEvent().getEventId();
-        this.userId = favourite.getUser().getUserId();
-        this.ticketType = favourite.getTicketType();
-        this.price = favourite.getPrice();
-        this.status = favourite.getStatus();
-        this.purchaseDate = favourite.getCreatedAt();
+    public FavouriteDTO(Favourite favourite) {
+        this.id = favourite.getFavouriteId();
+        this.favouriteDate = favourite.getCreatedAt();
     }
 }

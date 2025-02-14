@@ -11,30 +11,34 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class TicketService {
+public class FavouriteService {
     @Autowired
     private FavouriteRepository favouriteRepository;
 
-    public List<FavouriteDTO> getAllTickets() {
+    public List<FavouriteDTO> getAllFavourites() {
         return favouriteRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<FavouriteDTO> getTicketById(Long id) {
+    public Optional<FavouriteDTO> getFavouriteById(Long id) {
         return favouriteRepository.findById(id).map(this::mapToDTO);
     }
 
-    public FavouriteDTO createTicket(Favourite favourite) {
+    public Optional<FavouriteDTO> getFavouriteByUserIdAndFavouriteId(Long userId, Long favouriteId) {
+        return favouriteRepository.findByUser_UserIdAndEvent_EventId(userId, favouriteId).map(FavouriteDTO::new);
+    }
+
+    public FavouriteDTO createFavourite(Favourite favourite) {
         return mapToDTO(favouriteRepository.save(favourite));
     }
 
-    public FavouriteDTO updateTicket(Long id, Favourite favourite) {
-        favourite.setTicketId(id);
+    public FavouriteDTO updateFavourite(Long id, Favourite favourite) {
+        favourite.setFavouriteId(id);
         return mapToDTO(favouriteRepository.save(favourite));
     }
 
-    public void deleteTicket(Long id) {
+    public void deleteFavourite(Long id) {
         favouriteRepository.deleteById(id);
     }
 
@@ -44,13 +48,6 @@ public class TicketService {
 
     public Favourite mapToEntity(FavouriteDTO favouriteDTO) {
         Favourite favourite = new Favourite();
-        favourite.setTicketId(favouriteDTO.getTicketId());
-        favourite.getEvent().setEventId(favouriteDTO.getEventId());
-        favourite.getUser().setUserId(favouriteDTO.getUserId());
-        favourite.setTicketType(favouriteDTO.getTicketType());
-        favourite.setPrice(favouriteDTO.getPrice());
-        favourite.setStatus(favouriteDTO.getStatus());
-        favourite.setCreatedAt(favouriteDTO.getPurchaseDate());
         return favourite;
     }
 }

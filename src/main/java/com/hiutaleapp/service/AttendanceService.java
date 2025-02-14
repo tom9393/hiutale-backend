@@ -1,8 +1,8 @@
 package com.hiutaleapp.service;
 
-import com.hiutaleapp.dto.EventAttendeeDTO;
+import com.hiutaleapp.dto.AttendanceDTO;
 import com.hiutaleapp.entity.Attendance;
-import com.hiutaleapp.repository.EventAttendeeRepository;
+import com.hiutaleapp.repository.AttendanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,44 +11,48 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EventAttendeeService {
+public class AttendanceService {
     @Autowired
-    private EventAttendeeRepository eventAttendeeRepository;
+    private AttendanceRepository attendanceRepository;
 
-    public List<EventAttendeeDTO> getAllEventAttendees() {
-        return eventAttendeeRepository.findAll().stream()
+    public List<AttendanceDTO> getAllAttendances() {
+        return attendanceRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<EventAttendeeDTO> getEventAttendeeById(Long id) {
-        return eventAttendeeRepository.findById(id).map(this::mapToDTO);
+    public Optional<AttendanceDTO> getAttendanceById(Long id) {
+        return attendanceRepository.findById(id).map(this::mapToDTO);
     }
 
-    public EventAttendeeDTO createEventAttendee(Attendance attendance) {
-        return mapToDTO(eventAttendeeRepository.save(attendance));
+    public Optional<AttendanceDTO> getAttendanceByUserIdAndEventId(Long userId, Long eventId) {
+        return attendanceRepository.findByUser_UserIdAndEvent_EventId(userId, eventId).map(this::mapToDTO);
     }
 
-    public EventAttendeeDTO updateEventAttendee(Long id, Attendance attendance) {
-        attendance.setEventAttendeeId(id);
-        return mapToDTO(eventAttendeeRepository.save(attendance));
+    public AttendanceDTO createAttendance(Attendance attendance) {
+        return mapToDTO(attendanceRepository.save(attendance));
     }
 
-    public void deleteEventAttendee(Long id) {
-        eventAttendeeRepository.deleteById(id);
+    public AttendanceDTO updateAttendance(Long id, Attendance attendance) {
+        attendance.setAttendeeId(id);
+        return mapToDTO(attendanceRepository.save(attendance));
     }
 
-    public EventAttendeeDTO mapToDTO(Attendance attendance) {
-        return new EventAttendeeDTO(attendance);
+    public void deleteAttendance(Long id) {
+        attendanceRepository.deleteById(id);
     }
 
-    public Attendance mapToEntity(EventAttendeeDTO eventAttendeeDTO) {
+    public AttendanceDTO mapToDTO(Attendance attendance) {
+        return new AttendanceDTO(attendance);
+    }
+
+    public Attendance mapToEntity(AttendanceDTO attendanceDTO) {
         Attendance attendance = new Attendance();
-        attendance.setEventAttendeeId(eventAttendeeDTO.getEventAttendeeId());
-        attendance.getEvent().setEventId(eventAttendeeDTO.getEventId());
-        attendance.getUser().setUserId(eventAttendeeDTO.getUserId());
-        attendance.setStatus(eventAttendeeDTO.getStatus());
-        attendance.setCreatedAt(eventAttendeeDTO.getRegistrationTime());
+        attendance.setCreatedAt(attendanceDTO.getRegistrationTime());
         return attendance;
+    }
+
+    public long countByEventId(Long eventId) {
+        return attendanceRepository.countByEvent_EventId(eventId);
     }
 }

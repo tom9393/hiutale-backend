@@ -8,18 +8,12 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class EventAttendeeDTO {
-    private Long eventAttendeeId;
-    private Long eventId;
-    private Long userId;
-    private String status;
+public class AttendanceDTO {
+    private Long id;
     private Date registrationTime;
 
-    public EventAttendeeDTO(Attendance attendance) {
-        this.eventAttendeeId = attendance.getEventAttendeeId();
-        this.eventId = attendance.getEvent().getEventId();
-        this.userId = attendance.getUser().getUserId();
-        this.status = attendance.getStatus();
+    public AttendanceDTO(Attendance attendance) {
+        this.id = attendance.getAttendeeId();
         this.registrationTime = attendance.getCreatedAt();
     }
 }
