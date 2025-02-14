@@ -1,19 +1,18 @@
 package com.hiutaleapp.controller;
 
-import com.hiutaleapp.dto.ReviewDTO;
+import com.hiutaleapp.dto.FavouriteDTO;
 import com.hiutaleapp.entity.Event;
-import com.hiutaleapp.entity.Review;
+import com.hiutaleapp.entity.Favourite;
 import com.hiutaleapp.entity.User;
-import com.hiutaleapp.service.ReviewService;
+import com.hiutaleapp.service.FavouriteService;
 import com.hiutaleapp.util.DataViolationException;
 import com.hiutaleapp.util.DatabaseConnectionException;
+import com.hiutaleapp.util.FavouriteForm;
 import com.hiutaleapp.util.NotFoundException;
-import com.hiutaleapp.util.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -23,67 +22,59 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/reviews")
-public class ReviewController {
+@RequestMapping("/favourites")
+public class FavouriteController {
     @Autowired
-    private ReviewService reviewService;
+    private FavouriteService favouriteService;
 
     @GetMapping("/all")
-    public List<ReviewDTO> getAllReviews() {
-        return reviewService.getAllReviews();
+    public List<FavouriteDTO> getAllFavourites() {
+        return favouriteService.getAllFavourites();
     }
 
     @GetMapping("/one/{id}")
-    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long id) {
-        return reviewService.getReviewById(id)
+    public ResponseEntity<FavouriteDTO> getFavouriteById(@PathVariable Long id) {
+        return favouriteService.getFavouriteById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
-    public ReviewDTO createReview(@RequestBody ReviewForm reviewForm) {
-        if (reviewForm.getRating() > 5 || reviewForm.getRating() < 0) throw new DataViolationException("Rating must be between 5 and 0");
+    public FavouriteDTO createFavourite(@RequestBody FavouriteForm favouriteForm) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-            Review review = new Review();
+            Favourite favourite = new Favourite();
             User user = new User();
             Event event = new Event();
 
             user.setUserId(Long.parseLong(auth.getName()));
-            event.setEventId(reviewForm.getEventId());
+            event.setEventId(favouriteForm.getId());
 
-            review.setUser(user);
-            review.setEvent(event);
-            review.setRating(reviewForm.getRating());
-            review.setReviewText(reviewForm.getText());
+            favourite.setUser(user);
+            favourite.setEvent(event);
 
-            return reviewService.createReview(review);
+            return favouriteService.createFavourite(favourite);
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");
         } catch (DataIntegrityViolationException e) {
-            throw new DataViolationException("Could not create review due to foreign key error; either event doesn't exist or you have already reviewed it");
+            throw new DataViolationException("Could not create review due to foreign key error; either event does not exist or you have already favourited it");
         }
     }
 
     @PutMapping("/update/{id}")
-    public ReviewDTO updateReview(@PathVariable Long id, @RequestBody Review review) {
-        return reviewService.updateReview(id, review);
+    public FavouriteDTO updateFavourite(@PathVariable Long id, @RequestBody Favourite favourite) {
+        return favouriteService.updateFavourite(id, favourite);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteReview(@PathVariable Long id) {
+    public void deleteFavourite(@PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
-            Optional<ReviewDTO> review = reviewService.getReviewById(id);
+            Optional<FavouriteDTO> review = favouriteService.getFavouriteByUserIdAndFavouriteId(Long.parseLong(auth.getName()), id);
             if (review.isPresent()) {
-                if (review.get().getUserId() == Long.parseLong(auth.getName())) {
-                    reviewService.deleteReview(id);
-                } else {
-                    throw new AuthorizationDeniedException("You do not have permission to delete this review");
-                }
+                favouriteService.deleteFavourite(review.get().getId());
             } else {
-                throw new NotFoundException("Review with this ID does not exist");
+                throw new NotFoundException("Event with this ID does not exist");
             }
         } catch (DataAccessResourceFailureException e) {
             throw new DatabaseConnectionException("Could not connect to the database");

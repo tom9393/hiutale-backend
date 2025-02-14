@@ -15,14 +15,40 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
+    private static EventDTO objectToDTO(Object[] result) {
+        Event event = (Event) result[0];
+        Long attendanceCount = (Long) result[1];
+        Long favouriteCount = (Long) result[2];
+
+        EventDTO eventDTO = new EventDTO(event);
+        eventDTO.setAttendanceCount(attendanceCount);
+        eventDTO.setFavouriteCount(favouriteCount);
+        return eventDTO;
+    }
+
     public List<EventDTO> getAllEvents() {
         return eventRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
+    public List<EventDTO> getAllEventsWithCounts() {
+        return eventRepository.findAllEventsWithAttendanceAndFavouritesCount()
+                .stream()
+                .map(EventService::objectToDTO)
+                .collect(Collectors.toList());
+    }
+
     public Optional<EventDTO> getEventById(Long id) {
         return eventRepository.findById(id).map(this::mapToDTO);
+    }
+
+    public EventDTO getEventWithCounts(Long eventId) {
+        List<EventDTO> eventDTOs = eventRepository.findEventWithAttendanceAndFavouritesCount(eventId)
+                .stream()
+                .map(EventService::objectToDTO)
+                .collect(Collectors.toList());
+        return eventDTOs.removeFirst(); // I couldn't find a way to return only a single JPA query so this shall do
     }
 
     public EventDTO createEvent(Event event) {

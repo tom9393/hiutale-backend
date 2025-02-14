@@ -23,6 +23,8 @@ public class EventDTO {
     private Long organizerId;
     private Long locationId;
     private List<Long> eventCategoryIds;
+    private Long attendanceCount;
+    private Long favouriteCount;
 
     public EventDTO(Event event) {
         this.id = event.getEventId();
@@ -36,10 +38,8 @@ public class EventDTO {
         this.updatedAt = event.getUpdatedAt();
         this.organizerId = event.getOrganizer().getUserId();
         this.locationId = event.getLocation().getLocationId();
-        if (event.getEventCategories() != null) {
-            this.eventCategoryIds = event.getEventCategories().stream().map(EventCategory::getEventCategoryId).toList();
-        } else {
-            this.eventCategoryIds = null;
-        }
+        this.attendanceCount = (long) 0;
+        this.favouriteCount = (long) 0;
+        this.eventCategoryIds = event.getEventCategories() != null ? event.getEventCategories().stream().map(EventCategory::getEventCategoryId).toList() : null;
     }
 }

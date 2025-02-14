@@ -44,9 +44,10 @@ public class SecurityConfiguration {
                             "/users/update/**", "/users/delete/**",
                             "/events/create", "/events/delete/**",
                             "/locations/create", "/locations/delete/**",
-                            "/tickets/create", "/tickets/update/**", "/tickets/delete/**",
-                            "/reviews/create", "/reviews/update/**", "/reviews/delete/**",
-                            "/notifications/update/**", "/notifications/delete/**"
+                            "/favourites/create", "/favourites/delete/**",
+                            "/attendances/create", "/attendances/delete/**",
+                            "/reviews/create", "/reviews/delete/**",
+                            "/notifications/create/**", "/notifications/delete/**"
                     ).hasRole("USER");
                     reg.requestMatchers(("/**")).hasRole("ADMIN");
                     reg.anyRequest().authenticated();
