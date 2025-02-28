@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
                     // For now in order to help development
+                    reg.requestMatchers("/users/register", "/users/login").permitAll();
                     reg.requestMatchers(HttpMethod.POST).hasRole("USER");
                     reg.requestMatchers(HttpMethod.DELETE).hasRole("USER");
                     reg.requestMatchers(HttpMethod.PUT).denyAll();
