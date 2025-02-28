@@ -4,6 +4,7 @@ import com.hiutaleapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -31,7 +32,12 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
-                    // For now in order to help development all paths shall be accessible to all users
+                    // For now in order to help development
+                    reg.requestMatchers(HttpMethod.GET).permitAll();
+                    reg.requestMatchers(HttpMethod.POST).hasRole("USER");
+                    reg.requestMatchers(HttpMethod.DELETE).hasRole("USER");
+                    reg.requestMatchers(HttpMethod.PUT).denyAll();
+                    reg.requestMatchers(HttpMethod.PATCH).denyAll();
 //                    reg.requestMatchers(
 //                            "/users/register", "/users/login",
 //                            "/events/all", "/events/one/**",
@@ -51,7 +57,6 @@ public class SecurityConfiguration {
 //                            "/notifications/create/**", "/notifications/delete/**"
 //                    ).hasRole("USER");
 //                    reg.requestMatchers(("/**")).hasRole("ADMIN");
-                    reg.requestMatchers(("/**")).hasRole("USER");
                     reg.anyRequest().authenticated();
         })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

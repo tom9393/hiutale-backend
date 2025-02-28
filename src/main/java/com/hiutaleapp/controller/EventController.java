@@ -72,10 +72,10 @@ public class EventController {
         }
     }
 
-//    @PutMapping("/update/{id}")
-//    public EventDTO updateEvent(@PathVariable Long id, @RequestBody Event event) {
-//        return eventService.updateEvent(id, event);
-//    }
+    @PutMapping("/update/{id}")
+    public EventDTO updateEvent(@PathVariable Long id, @RequestBody Event event) {
+        return eventService.updateEvent(id, event);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteEvent(@PathVariable Long id) {

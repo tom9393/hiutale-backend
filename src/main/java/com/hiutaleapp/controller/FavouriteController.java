@@ -61,10 +61,10 @@ public class FavouriteController {
         }
     }
 
-//    @PutMapping("/update/{id}")
-//    public FavouriteDTO updateFavourite(@PathVariable Long id, @RequestBody Favourite favourite) {
-//        return favouriteService.updateFavourite(id, favourite);
-//    }
+    @PutMapping("/update/{id}")
+    public FavouriteDTO updateFavourite(@PathVariable Long id, @RequestBody Favourite favourite) {
+        return favouriteService.updateFavourite(id, favourite);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteFavourite(@PathVariable Long id) {

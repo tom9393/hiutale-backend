@@ -53,10 +53,10 @@ public class UserController {
         return userService.createUser(user);
     }
 
-//    @PutMapping("/update/{id}")
-//    public UserDTO updateUser(@PathVariable Long id, @RequestBody User user) {
-//        return userService.updateUser(id, user);
-//    }
+    @PutMapping("/update/{id}")
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id) {

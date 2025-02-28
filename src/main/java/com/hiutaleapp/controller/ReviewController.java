@@ -66,10 +66,10 @@ public class ReviewController {
         }
     }
 
-//    @PutMapping("/update/{id}")
-//    public ReviewDTO updateReview(@PathVariable Long id, @RequestBody Review review) {
-//        return reviewService.updateReview(id, review);
-//    }
+    @PutMapping("/update/{id}")
+    public ReviewDTO updateReview(@PathVariable Long id, @RequestBody Review review) {
+        return reviewService.updateReview(id, review);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteReview(@PathVariable Long id) {
