@@ -8,8 +8,9 @@ MYSQL_PASSWORD=PASSWORD
 MYSQL_DATABASE=DATABASE
 MYSQL_ROOTPASS=ROOTPASS
 ```
-Run
-
+Then run
+```
 docker compose up --build
+```
 
 To build and start the service
