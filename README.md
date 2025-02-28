@@ -8,11 +8,8 @@ MYSQL_PASSWORD=PASSWORD
 MYSQL_DATABASE=DATABASE
 MYSQL_ROOTPASS=ROOTPASS
 ```
-
-./mvnw clean package
-
-To compile .jar and then
+Run
 
 docker compose up --build
 
-To start the service
+To build and start the service
