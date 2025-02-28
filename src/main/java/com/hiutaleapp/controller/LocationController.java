@@ -61,10 +61,10 @@ public class LocationController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public LocationDTO updateLocation(@PathVariable Long id, @RequestBody Location location) {
-        return locationService.updateLocation(id, location);
-    }
+//    @PutMapping("/update/{id}")
+//    public LocationDTO updateLocation(@PathVariable Long id, @RequestBody Location location) {
+//        return locationService.updateLocation(id, location);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteLocation(@PathVariable Long id) {

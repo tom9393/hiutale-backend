@@ -77,10 +77,10 @@ public class AttendanceController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public AttendanceDTO updateAttendance(@PathVariable Long id, @RequestBody Attendance attendance) {
-        return attendanceService.updateAttendance(id, attendance);
-    }
+//    @PutMapping("/update/{id}")
+//    public AttendanceDTO updateAttendance(@PathVariable Long id, @RequestBody Attendance attendance) {
+//        return attendanceService.updateAttendance(id, attendance);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteAttendance(@PathVariable Long id) {

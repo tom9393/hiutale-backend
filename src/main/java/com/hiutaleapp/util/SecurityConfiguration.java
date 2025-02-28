@@ -31,25 +31,27 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
-                    reg.requestMatchers(
-                            "/users/register", "/users/login",
-                            "/events/all", "/events/one/**",
-                            "/locations/all", "/locations/one/**",
-                            "/reviews/all", "/reviews/one/**",
-                            "/categories/all", "/categories/one/**",
-                            "/event-categories/all", "/event-categories/one/**"
-
-                    ).permitAll();
-                    reg.requestMatchers(
-                            "/users/update/**", "/users/delete/**",
-                            "/events/create", "/events/delete/**",
-                            "/locations/create", "/locations/delete/**",
-                            "/favourites/create", "/favourites/delete/**",
-                            "/attendances/create", "/attendances/delete/**",
-                            "/reviews/create", "/reviews/delete/**",
-                            "/notifications/create/**", "/notifications/delete/**"
-                    ).hasRole("USER");
-                    reg.requestMatchers(("/**")).hasRole("ADMIN");
+                    // For now in order to help development all paths shall be accessible to all users
+//                    reg.requestMatchers(
+//                            "/users/register", "/users/login",
+//                            "/events/all", "/events/one/**",
+//                            "/locations/all", "/locations/one/**",
+//                            "/reviews/all", "/reviews/one/**",
+//                            "/categories/all", "/categories/one/**",
+//                            "/event-categories/all", "/event-categories/one/**"
+//
+//                    ).permitAll();
+//                    reg.requestMatchers(
+//                            "/users/update/**", "/users/delete/**",
+//                            "/events/create", "/events/delete/**",
+//                            "/locations/create", "/locations/delete/**",
+//                            "/favourites/create", "/favourites/delete/**",
+//                            "/attendances/create", "/attendances/delete/**",
+//                            "/reviews/create", "/reviews/delete/**",
+//                            "/notifications/create/**", "/notifications/delete/**"
+//                    ).hasRole("USER");
+//                    reg.requestMatchers(("/**")).hasRole("ADMIN");
+                    reg.requestMatchers(("/**")).hasRole("USER");
                     reg.anyRequest().authenticated();
         })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

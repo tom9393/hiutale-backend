@@ -32,10 +32,10 @@ public class NotificationController {
         return notificationService.createNotification(notification);
     }
 
-    @PutMapping("/update/{id}")
-    public NotificationDTO updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
-        return notificationService.updateNotification(id, notification);
-    }
+//    @PutMapping("/update/{id}")
+//    public NotificationDTO updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
+//        return notificationService.updateNotification(id, notification);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteNotification(@PathVariable Long id) {

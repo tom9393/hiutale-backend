@@ -35,10 +35,10 @@ public class EventCategoryController {
         return eventCategoryService.createEventCategory(eventCategory);
     }
 
-    @PutMapping("/update/{id}")
-    public EventCategoryDTO updateEventCategory(@PathVariable Long id, @RequestBody EventCategory eventCategory) {
-        return eventCategoryService.updateEventCategory(id, eventCategory);
-    }
+//    @PutMapping("/update/{id}")
+//    public EventCategoryDTO updateEventCategory(@PathVariable Long id, @RequestBody EventCategory eventCategory) {
+//        return eventCategoryService.updateEventCategory(id, eventCategory);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteEventCategory(@PathVariable Long id) {
