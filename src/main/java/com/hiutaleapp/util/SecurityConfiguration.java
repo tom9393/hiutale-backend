@@ -4,6 +4,7 @@ import com.hiutaleapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -31,25 +32,31 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(reg -> {
-                    reg.requestMatchers(
-                            "/users/register", "/users/login",
-                            "/events/all", "/events/one/**",
-                            "/locations/all", "/locations/one/**",
-                            "/reviews/all", "/reviews/one/**",
-                            "/categories/all", "/categories/one/**",
-                            "/event-categories/all", "/event-categories/one/**"
-
-                    ).permitAll();
-                    reg.requestMatchers(
-                            "/users/update/**", "/users/delete/**",
-                            "/events/create", "/events/delete/**",
-                            "/locations/create", "/locations/delete/**",
-                            "/favourites/create", "/favourites/delete/**",
-                            "/attendances/create", "/attendances/delete/**",
-                            "/reviews/create", "/reviews/delete/**",
-                            "/notifications/create/**", "/notifications/delete/**"
-                    ).hasRole("USER");
-                    reg.requestMatchers(("/**")).hasRole("ADMIN");
+                    // For now in order to help development
+                    reg.requestMatchers(HttpMethod.GET).permitAll();
+                    reg.requestMatchers(HttpMethod.POST).hasRole("USER");
+                    reg.requestMatchers(HttpMethod.DELETE).hasRole("USER");
+                    reg.requestMatchers(HttpMethod.PUT).denyAll();
+                    reg.requestMatchers(HttpMethod.PATCH).denyAll();
+//                    reg.requestMatchers(
+//                            "/users/register", "/users/login",
+//                            "/events/all", "/events/one/**",
+//                            "/locations/all", "/locations/one/**",
+//                            "/reviews/all", "/reviews/one/**",
+//                            "/categories/all", "/categories/one/**",
+//                            "/event-categories/all", "/event-categories/one/**"
+//
+//                    ).permitAll();
+//                    reg.requestMatchers(
+//                            "/users/update/**", "/users/delete/**",
+//                            "/events/create", "/events/delete/**",
+//                            "/locations/create", "/locations/delete/**",
+//                            "/favourites/create", "/favourites/delete/**",
+//                            "/attendances/create", "/attendances/delete/**",
+//                            "/reviews/create", "/reviews/delete/**",
+//                            "/notifications/create/**", "/notifications/delete/**"
+//                    ).hasRole("USER");
+//                    reg.requestMatchers(("/**")).hasRole("ADMIN");
                     reg.anyRequest().authenticated();
         })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
