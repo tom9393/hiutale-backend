@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +28,14 @@ public class Event {
 
     private Integer capacity;
 
-    private Date startTime;
+    private Date start;
 
-    private Date endTime;
+    private Date end;
 
     private String status;
+
+    @Digits(integer = 6, fraction = 2)
+    private BigDecimal price;
 
     @CreationTimestamp
     private Date createdAt;

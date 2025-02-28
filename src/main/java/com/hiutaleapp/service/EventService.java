@@ -74,8 +74,8 @@ public class EventService {
         event.setTitle(eventDTO.getTitle());
         event.setDescription(eventDTO.getDescription());
         event.setCapacity(eventDTO.getCapacity());
-        event.setStartTime(eventDTO.getStartTime());
-        event.setEndTime(eventDTO.getEndTime());
+        event.setStart(eventDTO.getStart());
+        event.setEnd(eventDTO.getEnd());
         event.setStatus(eventDTO.getStatus());
         event.setCreatedAt(eventDTO.getCreatedAt());
         event.setUpdatedAt(eventDTO.getUpdatedAt());

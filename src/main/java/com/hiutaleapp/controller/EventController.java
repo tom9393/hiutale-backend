@@ -53,9 +53,10 @@ public class EventController {
             event.setDescription(eventForm.getDescription());
             event.setDescription(eventForm.getDescription());
             event.setCapacity(eventForm.getCapacity());
-            event.setStartTime(eventForm.getStart());
-            event.setEndTime(eventForm.getEnd());
+            event.setStart(eventForm.getStart());
+            event.setEnd(eventForm.getEnd());
             event.setStatus(eventForm.getStatus());
+            event.setPrice(eventForm.getPrice());
 
             // If there's time left fix this
             List<EventCategory> c = addCategories(eventForm.getCategories(), event);
