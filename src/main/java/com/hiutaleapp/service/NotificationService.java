@@ -3,6 +3,7 @@ package com.hiutaleapp.service;
 import com.hiutaleapp.dto.NotificationDTO;
 import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.repository.NotificationRepository;
+import com.hiutaleapp.util.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +31,9 @@ public class NotificationService {
     }
 
     public void markAsRead(Long id) {
-        notificationRepository.findById(id)
-                .map(e -> {
-                    e.setReadStatus(true);
-                    return notificationRepository.save(e);
-                });
+        Notification notifications = notificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Notification not found"));
+        notifications.setReadStatus(true);
+        notificationRepository.save(notifications);
     }
 
     public NotificationDTO updateNotification(Long id, Notification notification) {
