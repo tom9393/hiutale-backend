@@ -25,6 +25,12 @@ public class AttendanceService {
         return attendanceRepository.findById(id).map(this::mapToDTO);
     }
 
+    public List<AttendanceDTO> getAttendanceByUser(Long id) {
+        return attendanceRepository.findByUser_UserId(id).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
     public Optional<AttendanceDTO> getAttendanceByUserIdAndEventId(Long userId, Long eventId) {
         return attendanceRepository.findByUser_UserIdAndEvent_EventId(userId, eventId).map(this::mapToDTO);
     }

@@ -25,6 +25,12 @@ public class FavouriteService {
         return favouriteRepository.findById(id).map(this::mapToDTO);
     }
 
+    public List<FavouriteDTO> getFavouriteByUser(Long id) {
+        return favouriteRepository.findByUser_UserId(id).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
     public Optional<FavouriteDTO> getFavouriteByUserIdAndFavouriteId(Long userId, Long favouriteId) {
         return favouriteRepository.findByUser_UserIdAndEvent_EventId(userId, favouriteId).map(FavouriteDTO::new);
     }
