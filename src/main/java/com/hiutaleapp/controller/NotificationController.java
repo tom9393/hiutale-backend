@@ -29,7 +29,7 @@ public class NotificationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/user-all")
+    @GetMapping("/me")
     public List<NotificationDTO> getNotificationsForUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return notificationService.getAllUserNotifications(Long.parseLong(auth.getName()));

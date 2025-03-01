@@ -50,6 +50,12 @@ public class AttendanceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/me")
+    public List<AttendanceDTO> getAttendanceByUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return attendanceService.getAttendanceByUser(Long.parseLong(auth.getName()));
+    }
+
     @PostMapping("/create")
     public AttendanceDTO createAttendance(@RequestBody AttendanceForm attendanceForm) {
         try {

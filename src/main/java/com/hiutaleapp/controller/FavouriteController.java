@@ -39,6 +39,13 @@ public class FavouriteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/me")
+    public List<FavouriteDTO> getFavouritesByUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return favouriteService.getFavouriteByUser(Long.parseLong(auth.getName()));
+
+    }
+
     @PostMapping("/create")
     public FavouriteDTO createFavourite(@RequestBody FavouriteForm favouriteForm) {
         try {
