@@ -11,12 +11,14 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-
+      SPRING_WEB_RESOURCES_STATIC_LOCATIONS: file:/var/www/img/
     ports:
       - "8080:8080"
     networks:
       - app_network
     restart: always
+    volumes:
+      - /var/www/img:/var/www/img
 
   mariadb:
     image: mariadb:latest
