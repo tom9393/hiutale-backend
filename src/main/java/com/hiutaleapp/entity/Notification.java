@@ -27,6 +27,8 @@ public class Notification {
 
     private Boolean readStatus;
 
+    private Date displayAfter;
+
     @CreationTimestamp
     private Date createdAt;
 

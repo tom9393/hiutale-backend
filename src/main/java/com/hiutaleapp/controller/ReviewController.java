@@ -1,9 +1,13 @@
 package com.hiutaleapp.controller;
 
+import com.hiutaleapp.dto.EventDTO;
 import com.hiutaleapp.dto.ReviewDTO;
 import com.hiutaleapp.entity.Event;
+import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.entity.Review;
 import com.hiutaleapp.entity.User;
+import com.hiutaleapp.service.EventService;
+import com.hiutaleapp.service.NotificationService;
 import com.hiutaleapp.service.ReviewService;
 import com.hiutaleapp.util.DataViolationException;
 import com.hiutaleapp.util.DatabaseConnectionException;
@@ -19,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +32,10 @@ import java.util.Optional;
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private EventService eventService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/all")
     public List<ReviewDTO> getAllReviews() {
@@ -58,6 +67,20 @@ public class ReviewController {
             review.setRating(reviewForm.getRating());
             review.setReviewText(reviewForm.getText());
 
+            Optional<EventDTO> e = eventService.getEventById(reviewForm.getEventId());
+            if (e.isEmpty()) {
+                throw new DataViolationException("No event with this ID found");
+            }
+
+            Notification notification = new Notification();
+            User user2 = new User();
+            user2.setUserId(e.get().getOrganizerId());
+            notification.setUser(user2);
+            notification.setReadStatus(false);
+            notification.setDisplayAfter(new Date());
+            notification.setMessage("Someone has left a review to your event!");
+
+            notificationService.createNotification(notification);
             return reviewService.createReview(review);
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");

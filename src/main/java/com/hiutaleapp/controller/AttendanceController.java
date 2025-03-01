@@ -4,9 +4,11 @@ import com.hiutaleapp.dto.AttendanceDTO;
 import com.hiutaleapp.dto.EventDTO;
 import com.hiutaleapp.entity.Attendance;
 import com.hiutaleapp.entity.Event;
+import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.entity.User;
 import com.hiutaleapp.service.AttendanceService;
 import com.hiutaleapp.service.EventService;
+import com.hiutaleapp.service.NotificationService;
 import com.hiutaleapp.util.AttendanceForm;
 import com.hiutaleapp.util.DataViolationException;
 import com.hiutaleapp.util.DatabaseConnectionException;
@@ -20,6 +22,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +35,8 @@ public class AttendanceController {
     private AttendanceService attendanceService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/all")
     public List<AttendanceDTO> getAllAttendances() {
@@ -69,6 +76,28 @@ public class AttendanceController {
             attendance.setUser(user);
             attendance.setEvent(event);
 
+            Notification notification = new Notification();
+            User user2 = new User();
+            user2.setUserId(eventDTO.get().getOrganizerId());
+            notification.setUser(user2);
+            notification.setReadStatus(false);
+            notification.setDisplayAfter(new Date());
+            notification.setMessage("Someone has registered to your event!");
+
+
+            // Subtract 24 hours from event start time
+            Date eventStart = eventDTO.get().getStart();
+            Instant displayAfterInstant = eventStart.toInstant().minus(24, ChronoUnit.HOURS);
+            Notification notification2 = new Notification();
+            User user3 = new User();
+            user3.setUserId(Long.parseLong(auth.getName()));
+            notification2.setUser(user3);
+            notification2.setReadStatus(false);
+            notification2.setDisplayAfter(Date.from(displayAfterInstant));
+            notification2.setMessage("You have an upcoming event in less than 24h!");
+
+            notificationService.createNotification(notification);
+            notificationService.createNotification(notification2);
             return attendanceService.createAttendance(attendance);
         } catch (CannotCreateTransactionException e) {
             throw new DatabaseConnectionException("Could not connect to the database");
@@ -86,9 +115,9 @@ public class AttendanceController {
     public void deleteAttendance(@PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
-            Optional<AttendanceDTO> review = attendanceService.getAttendanceByUserIdAndEventId(Long.parseLong(auth.getName()), id);
-            if (review.isPresent()) {
-                attendanceService.deleteAttendance(review.get().getId());
+            Optional<AttendanceDTO> attendance = attendanceService.getAttendanceByUserIdAndEventId(Long.parseLong(auth.getName()), id);
+            if (attendance.isPresent()) {
+                attendanceService.deleteAttendance(attendance.get().getId());
             } else {
                 throw new NotFoundException("Event with this ID does not exist");
             }

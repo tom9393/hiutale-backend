@@ -5,6 +5,8 @@ import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,17 @@ public class NotificationController {
         return notificationService.getNotificationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user-all")
+    public List<NotificationDTO> getNotificationsForUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return notificationService.getAllUserNotifications(Long.parseLong(auth.getName()));
+    }
+
+    @PostMapping("/read/{id}")
+    public void markAsRead(@PathVariable Long id) {
+        notificationService.markAsRead(id);
     }
 
     @PostMapping("/create")

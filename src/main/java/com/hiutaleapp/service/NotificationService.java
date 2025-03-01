@@ -29,6 +29,14 @@ public class NotificationService {
         return mapToDTO(notificationRepository.save(notification));
     }
 
+    public void markAsRead(Long id) {
+        notificationRepository.findById(id)
+                .map(e -> {
+                    e.setReadStatus(true);
+                    return notificationRepository.save(e);
+                });
+    }
+
     public NotificationDTO updateNotification(Long id, Notification notification) {
         notification.setNotificationId(id);
         return mapToDTO(notificationRepository.save(notification));
@@ -40,6 +48,12 @@ public class NotificationService {
 
     public NotificationDTO mapToDTO(Notification notification) {
         return new NotificationDTO(notification);
+    }
+
+    public List<NotificationDTO> getAllUserNotifications(Long id) {
+        return notificationRepository.findAllDisplayedNotifications(id).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public Notification mapToEntity(NotificationDTO notificationDTO) {
