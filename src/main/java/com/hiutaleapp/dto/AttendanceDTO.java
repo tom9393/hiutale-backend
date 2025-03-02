@@ -10,10 +10,12 @@ import java.util.Date;
 @Setter
 public class AttendanceDTO {
     private Long id;
+    private Long eventId;
     private Date registrationTime;
 
     public AttendanceDTO(Attendance attendance) {
         this.id = attendance.getAttendeeId();
+        this.eventId = attendance.getEvent().getEventId();
         this.registrationTime = attendance.getCreatedAt();
     }
 }

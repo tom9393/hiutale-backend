@@ -10,10 +10,12 @@ import java.util.Date;
 @Setter
 public class FavouriteDTO {
     private Long id;
+    private Long eventId;
     private Date favouriteDate;
 
     public FavouriteDTO(Favourite favourite) {
         this.id = favourite.getFavouriteId();
+        this.eventId = favourite.getEvent().getEventId();
         this.favouriteDate = favourite.getCreatedAt();
     }
 }
