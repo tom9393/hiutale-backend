@@ -24,6 +24,18 @@ public class EventCategory {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "category_fi_id")
+    private CategoryFI categoryfi;
+
+    @ManyToOne
+    @JoinColumn(name = "category_fa_id")
+    private CategoryFA categoryfa;
+
+    @ManyToOne
+    @JoinColumn(name = "category_ja_id")
+    private CategoryJA categoryja;
+
+    @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
 
