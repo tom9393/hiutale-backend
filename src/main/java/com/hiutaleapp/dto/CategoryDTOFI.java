@@ -1,6 +1,6 @@
 package com.hiutaleapp.dto;
 
-import com.hiutaleapp.entity.Category;
+import com.hiutaleapp.entity.CategoryFI;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,14 +8,14 @@ import java.util.Date;
 
 @Setter
 @Getter
-public class CategoryDTO {
+public class CategoryDTOFI {
     private Long categoryId;
     private String name;
     private String description;
     private Date createdAt;
     private Date updatedAt;
 
-    public CategoryDTO(Category category) {
+    public CategoryDTOFI(CategoryFI category) {
         this.categoryId = category.getCategoryId();
         this.name = category.getName();
         this.description = category.getDescription();

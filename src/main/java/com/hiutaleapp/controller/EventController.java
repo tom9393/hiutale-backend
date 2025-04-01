@@ -104,9 +104,20 @@ public class EventController {
         for (int i = 0; i < categories.size(); i++) {
             Long categoryNumber = categories.get(i);
             EventCategory eventCategory = new EventCategory();
+
             Category category = new Category();
+            CategoryFA categoryfa = new CategoryFA();
+            CategoryFI categoryfi = new CategoryFI();
+            CategoryJA categoryja = new CategoryJA();
             category.setCategoryId(categoryNumber);
+            categoryfa.setCategoryId(categoryNumber);
+            categoryfi.setCategoryId(categoryNumber);
+            categoryja.setCategoryId(categoryNumber);
+
             eventCategory.setCategory(category);
+            eventCategory.setCategoryfi(categoryfi);
+            eventCategory.setCategoryfa(categoryfa);
+            eventCategory.setCategoryja(categoryja);
             eventCategory.setEvent(event);
             c.add(eventCategory);
         }
