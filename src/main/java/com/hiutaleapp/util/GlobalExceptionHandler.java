@@ -137,8 +137,6 @@ public class GlobalExceptionHandler {
         body.put("message", "Internal server error");
         body.put("path", request.getDescription(false));
 
-        System.out.println(ex.getMessage());
-
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
