@@ -80,7 +80,7 @@ public class FileService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFile(Long fileId, Long userId) throws IOException, IllegalArgumentException, SecurityException {
+    public Boolean deleteFile(Long userId, Long fileId) throws IOException, IllegalArgumentException, SecurityException {
         FileEntity fileEntity = fileRepository.findById(fileId)
                 .orElseThrow(() -> new IllegalArgumentException("File not found"));
 
@@ -92,6 +92,7 @@ public class FileService {
 
         Path filePath = Paths.get(UPLOAD_DIR, fileEntity.getFilename());
         Files.deleteIfExists(filePath);
+        return true;
     }
 
     public FileDTO mapToDTO(FileEntity fileEntity) {

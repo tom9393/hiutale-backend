@@ -3,23 +3,12 @@ package com.hiutaleapp.controller;
 import com.hiutaleapp.dto.EventDTO;
 import com.hiutaleapp.entity.*;
 import com.hiutaleapp.service.EventService;
-import com.hiutaleapp.util.DatabaseConnectionException;
-import com.hiutaleapp.util.DataViolationException;
-import com.hiutaleapp.util.EventForm;
-import com.hiutaleapp.util.NotFoundException;
+import com.hiutaleapp.util.UserContext;
+import com.hiutaleapp.util.forms.EventForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/events")
@@ -39,37 +28,7 @@ public class EventController {
 
     @PostMapping("/create")
     public EventDTO createEvent(@RequestBody EventForm eventForm) {
-        try {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-            Event event = new Event();
-            User user = new User();
-            Location location = new Location();
-
-            user.setUserId(Long.parseLong(auth.getName()));
-            location.setLocationId(eventForm.getLocationId());
-
-            event.setTitle(eventForm.getTitle());
-            event.setDescription(eventForm.getDescription());
-            event.setDescription(eventForm.getDescription());
-            event.setCapacity(eventForm.getCapacity());
-            event.setStart(eventForm.getStart());
-            event.setEnd(eventForm.getEnd());
-            event.setStatus(eventForm.getStatus());
-            event.setPrice(eventForm.getPrice());
-
-            // If there's time left fix this
-            List<EventCategory> c = addCategories(eventForm.getCategories(), event);
-
-            event.setEventCategories(c);
-            event.setOrganizer(user);
-            event.setLocation(location);
-            return eventService.createEvent(event);
-        } catch (CannotCreateTransactionException e) {
-            throw new DatabaseConnectionException("Could not connect to the database");
-        } catch (DataIntegrityViolationException e) {
-            throw new DataViolationException("Could not create event due to foreign key error");
-        }
+        return eventService.createEvent(UserContext.getUserId(), eventForm);
     }
 
     @PutMapping("/update/{id}")
@@ -78,49 +37,7 @@ public class EventController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEvent(@PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        try {
-            Optional<EventDTO> event = eventService.getEventById(id);
-            if (event.isPresent()) {
-                if (event.get().getOrganizerId() == Long.parseLong(auth.getName())) {
-                    eventService.deleteEvent(id);
-                } else {
-                    throw new AuthorizationDeniedException("You do not have permission to delete this event");
-                }
-            } else {
-                throw new NotFoundException("Event with this ID does not exist");
-            }
-        } catch (DataAccessResourceFailureException e) {
-            throw new DatabaseConnectionException("Could not connect to the database");
-        } catch (DataIntegrityViolationException e) {
-            throw new DataViolationException("Could not delete this event because other data is dependent upon it");
-        }
-    }
-
-    private List<EventCategory> addCategories(List<Long> categories, Event event) {
-        if (categories == null) return null;
-        List<EventCategory> c = new ArrayList<>();
-        for (int i = 0; i < categories.size(); i++) {
-            Long categoryNumber = categories.get(i);
-            EventCategory eventCategory = new EventCategory();
-
-            Category category = new Category();
-            CategoryFA categoryfa = new CategoryFA();
-            CategoryFI categoryfi = new CategoryFI();
-            CategoryJA categoryja = new CategoryJA();
-            category.setCategoryId(categoryNumber);
-            categoryfa.setCategoryId(categoryNumber);
-            categoryfi.setCategoryId(categoryNumber);
-            categoryja.setCategoryId(categoryNumber);
-
-            eventCategory.setCategory(category);
-            eventCategory.setCategoryfi(categoryfi);
-            eventCategory.setCategoryfa(categoryfa);
-            eventCategory.setCategoryja(categoryja);
-            eventCategory.setEvent(event);
-            c.add(eventCategory);
-        }
-        return c;
+    public Boolean deleteEvent(@PathVariable Long id) {
+        return eventService.deleteEvent(UserContext.getUserId(), id);
     }
 }

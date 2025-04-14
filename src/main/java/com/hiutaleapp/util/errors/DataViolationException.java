@@ -1,4 +1,4 @@
-package com.hiutaleapp.util;
+package com.hiutaleapp.util.errors;
 
 public class DataViolationException extends RuntimeException {
 

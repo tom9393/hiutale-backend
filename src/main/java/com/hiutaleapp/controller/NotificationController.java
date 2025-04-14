@@ -3,10 +3,9 @@ package com.hiutaleapp.controller;
 import com.hiutaleapp.dto.NotificationDTO;
 import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.service.NotificationService;
+import com.hiutaleapp.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +30,7 @@ public class NotificationController {
 
     @GetMapping("/me")
     public List<NotificationDTO> getNotificationsForUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return notificationService.getAllUserNotifications(Long.parseLong(auth.getName()));
+        return notificationService.getAllUserNotifications(UserContext.getUserId());
     }
 
     @PostMapping("/read/{id}")

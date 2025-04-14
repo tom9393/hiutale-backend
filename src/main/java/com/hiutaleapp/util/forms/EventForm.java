@@ -1,4 +1,4 @@
-package com.hiutaleapp.util;
+package com.hiutaleapp.util.forms;
 
 import lombok.Getter;
 import lombok.Setter;

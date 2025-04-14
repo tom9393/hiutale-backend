@@ -2,9 +2,8 @@ package com.hiutaleapp.controller;
 
 import com.hiutaleapp.dto.FileDTO;
 import com.hiutaleapp.service.FileService;
+import com.hiutaleapp.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +19,7 @@ public class FileController {
 
     @PostMapping("/upload")
     public FileDTO uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("eventId") Long eventId) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return fileService.uploadFile(file, Long.parseLong(auth.getName()), eventId);
+        return fileService.uploadFile(file, UserContext.getUserId(), eventId);
     }
 
     @GetMapping("/one/{fileId}")
@@ -35,8 +33,7 @@ public class FileController {
     }
 
     @DeleteMapping("/delete/{fileId}")
-    public void deleteFile(@PathVariable Long fileId) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        fileService.deleteFile(fileId, Long.parseLong(auth.getName()));
+    public Boolean deleteFile(@PathVariable Long fileId) throws IOException {
+        return fileService.deleteFile(UserContext.getUserId(), fileId);
     }
 }

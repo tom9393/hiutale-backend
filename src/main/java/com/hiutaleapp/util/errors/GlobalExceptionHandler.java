@@ -1,4 +1,4 @@
-package com.hiutaleapp.util;
+package com.hiutaleapp.util.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

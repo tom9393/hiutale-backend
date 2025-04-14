@@ -3,7 +3,7 @@ package com.hiutaleapp.service;
 import com.hiutaleapp.dto.NotificationDTO;
 import com.hiutaleapp.entity.Notification;
 import com.hiutaleapp.repository.NotificationRepository;
-import com.hiutaleapp.util.NotFoundException;
+import com.hiutaleapp.util.errors.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
