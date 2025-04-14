@@ -60,7 +60,7 @@ Application will be available on port 8080.
 - **Image Handling:** Users can upload and view images for events.
 - **Notifications:** Users will get notifications for upcoming events.
 
-## Backend
+## Frontend
 
 Project frontend is in [separate repository](https://github.com/teemvat/hiutale-frontend) by [@teemvat](https://github.com/teemvat).
 
