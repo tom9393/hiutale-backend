@@ -23,7 +23,7 @@ public class EventDTO {
     private Date updatedAt;
     private Long organizerId;
     private Long locationId;
-    private List<Long> eventCategoryIds;
+    private List<Long> categories;
     private Long attendanceCount;
     private Long favouriteCount;
 
@@ -42,6 +42,6 @@ public class EventDTO {
         this.locationId = event.getLocation().getLocationId();
         this.attendanceCount = (long) 0;
         this.favouriteCount = (long) 0;
-        this.eventCategoryIds = event.getEventCategories() != null ? event.getEventCategories().stream().map(eg -> eg.getCategory().getCategoryId()).toList() : null; // Ugly garbage
+        this.categories = event.getEventCategories() != null ? event.getEventCategories().stream().map(eg -> eg.getCategory().getCategoryId()).toList() : null; // Ugly garbage
     }
 }
